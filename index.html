@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mes Lien - Djam Deen </title>
+  <meta name="description" content="Retrouvez tous mes liens et réseaux sociaux au même endroit." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/tools/icon/logo_icon.png">
+
+  <style>
+   
+    /* ---------- RESET & BASE ---------- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --violet-profond  : #240046;
+      --violet-neon     : #7B2CBF;
+      --orange-corail   : #FF8500;
+      --noir-anthracite : #10002B;
+      --lilas-pale      : #E0AAFF;
+      --white           : #ffffff;
+
+      --font-main: 'Outfit', sans-serif;
+      --transition: 0.3s ease;
+      --radius-card: 16px;
+      --radius-btn : 14px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--noir-anthracite);
+      color: var(--white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px 80px;
+      overflow-x: hidden;
+
+      /* Fond vivant : dégradé radial animé */
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(123, 44, 191, 0.20) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 80%, rgba(36, 0, 70, 0.40) 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+
+    /* --------- PARTICULES DE FOND --------- */
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* --------- CONTENEUR PRINCIPAL --------- */
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    /* =========================================
+       SECTION PROFIL
+    ========================================= */
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    /* Anneau animé autour de la photo */
+    .avatar-ring {
+      position: relative;
+      width: 112px;
+      height: 112px;
+    }
+
+    .avatar-ring::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--violet-neon), var(--orange-corail), var(--lilas-pale), var(--violet-neon)
+      );
+      animation: spin-ring 4s linear infinite;
+      z-index: 0;
+    }
+
+    .avatar-ring::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--violet-neon), var(--orange-corail), var(--lilas-pale), var(--violet-neon)
+      );
+      filter: blur(10px);
+      opacity: 0.6;
+      animation: spin-ring 4s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes spin-ring {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar-img {
+      position: relative;
+      z-index: 1;
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      border: 3px solid var(--noir-anthracite);
+      object-fit: cover;
+      display: block;
+
+    }
+
+
+    .profile-name {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .profile-name span {
+      color: var(--violet-neon);
+    }
+
+    .profile-tag {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--orange-corail);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .profile-bio {
+      font-size: 0.95rem;
+      font-weight: 300;
+      color: var(--lilas-pale);
+      line-height: 1.7;
+      max-width: 380px;
+    }
+
+    /* =========================================
+       SÉPARATEUR STYLISÉ
+    ========================================= */
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--violet-neon), var(--orange-corail));
+      border-radius: 99px;
+      margin: 4px 0 32px;
+    }
+
+    /* =========================================
+       SECTION LIENS
+    ========================================= */
+    .links-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Titre  de section */
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--lilas-pale);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    /* --------- CARTE LIEN --------- */
+    .link-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-radius: var(--radius-card);
+      text-decoration: none;
+      color: var(--white);
+      overflow: hidden;
+      cursor: pointer;
+
+      /* Glassmorphisme */
+      background: rgba(36, 0, 70, 0.55);
+      border: 1px solid rgba(224, 170, 255, 0.18);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+
+      transition:
+        transform var(--transition),
+        box-shadow var(--transition),
+        border-color var(--transition),
+        background var(--transition);
+
+      /* Animation d'entrée staggerée gérée par JS */
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    /* Lueur de fond au hover */
+    .link-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(123,44,191,0.25), rgba(255,133,0,0.10));
+      opacity: 0;
+      transition: opacity var(--transition);
+      border-radius: inherit;
+    }
+
+    .link-card:hover::before { opacity: 1; }
+
+    .link-card:hover {
+      transform: translateY(-3px) scale(1.015);
+      box-shadow:
+        0 12px 40px rgba(123, 44, 191, 0.30),
+        0 0  20px rgba(255, 133, 0, 0.08);
+      border-color: rgba(224, 170, 255, 0.40);
+    }
+
+    /* Icône réseau */
+    .link-icon {
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      border-radius: 12px;
+      background: rgba(224, 170, 255, 0.08);
+      border: 1px solid rgba(224, 170, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+
+    .link-card:hover .link-icon {
+      border-color: var(--violet-neon);
+    }
+
+    .link-icon img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
+
+    
+
+    /* Texte */
+    .link-text {
+      flex: 1;
+    }
+
+    .link-platform {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--lilas-pale);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+      opacity: 0.8;
+    }
+
+    .link-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    /* Flèche droite */
+    .link-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 133, 0, 0.12);
+      border: 1px solid rgba(255, 133, 0, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition:
+        background var(--transition),
+        border-color var(--transition),
+        transform var(--transition);
+    }
+
+    .link-card:hover .link-arrow {
+      background: var(--orange-corail);
+      border-color: var(--orange-corail);
+      transform: translateX(3px);
+    }
+
+    .link-arrow svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--orange-corail);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke var(--transition);
+    }
+
+    .link-card:hover .link-arrow svg {
+      stroke: var(--white);
+    }
+
+    /* =========================================
+       BOUTON CTA PRINCIPAL
+    ========================================= */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+      padding: 16px 36px;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      font-family: var(--font-main);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+      background: linear-gradient(135deg, var(--orange-corail), #e07000);
+      border: none;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+
+      /* Pulse subtil */
+      box-shadow:
+        0 0 0 0 rgba(255, 133, 0, 0.5);
+      animation: cta-pulse 2.5s ease infinite;
+
+      transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+    }
+
+    @keyframes cta-pulse {
+      0%, 100% { box-shadow: 0 0 0 0   rgba(255,133,0,0.45); }
+      50%       { box-shadow: 0 0 0 12px rgba(255,133,0,0);    }
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 30px rgba(255, 133, 0, 0.45);
+      animation: none;
+    }
+
+    .cta-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* =========================================
+       PIED DE PAGE
+    ========================================= */
+    .footer {
+      margin-top: 48px;
+      text-align: center;
+    }
+
+    .footer p {
+      font-size: 0.75rem;
+      color: var(--lilas-pale);
+      opacity: 0.45;
+      letter-spacing: 1px;
+    }
+
+   
+    /* =========================================
+       RESPONSIVE
+    ========================================= */
+    @media (max-width: 420px) {
+      body { padding: 36px 16px 60px; }
+      .profile-name { font-size: 1.4rem; }
+      .link-card { padding: 14px 16px; }
+      .link-label { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Particules de fond -->
+  <canvas id="particles-canvas" aria-hidden="true"></canvas>
+
+
+  <!-- ============================
+       CONTENU PRINCIPAL
+  ============================ -->
+  <main class="container">
+
+    <!-- ── PROFIL ── -->
+    <section class="profile" aria-label="Profil">
+      <div class="avatar-ring" id="avatar-ring">
+         <img
+            class="avatar-img"
+            src="/tools/img/profil.png"
+            alt="Photo de profil de Djam Deen"
+          />
+      </div>
+      <h1 class="profile-name"><span>Djamal ALIDOU MADOUGOU</span></h1>
+      <p class="profile-tag">FRONTEND DEV · PROBLEM SOLVER · FUTUR FOUNDER</p>
+      <p class="profile-bio">
+        Je transforme des idées en interfaces digitales propres et percutantes. 
+        Développeur frontend disponible pour vos projets — local & international.
+        En route vers le full-stack.
+      </p>
+
+    </section>
+
+    <!-- Séparateur -->
+    <div class="divider" aria-hidden="true"></div>
+
+    <!-- ── LIENS ── -->
+    <nav class="links-section" aria-label="Liens et réseaux sociaux">
+
+      <p class="section-label" aria-hidden="true">Mes réseaux</p>
+      <!-- Instagram -->
+      <a
+        class="link-card"
+        href="https://www.instagram.com/djamdeen_/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Mon profil Instagram"
+        id="link-instagram"
+      >
+        <div class="link-icon" aria-hidden="true">
+          <img src="/tools/icon/instagram_48.png" alt="Instagram">
+        </div>
+        <div class="link-text">
+          <div class="link-platform">Réseau Social</div>
+          <div class="link-label">Instagram</div>
+        </div>
+        <div class="link-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <!-- LinkedIn -->
+      <a
+        class="link-card"
+        href="https://www.linkedin.com/in/djamdeen/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Mon profil LinkedIn"
+        id="link-linkedin"
+      >
+        <div class="link-icon" aria-hidden="true">
+          <img src="/tools/icon/linkedin_48.png" alt="LinkedIn">
+        </div>
+        <div class="link-text">
+          <div class="link-platform">Réseau Professionnel</div>
+          <div class="link-label">LinkedIn</div>
+        </div>
+        <div class="link-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <!-- Facebook -->
+      <a
+        class="link-card"
+        href="https://www.facebook.com/people/Djamal-Alidou-Madougou/61574515420366/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Mon compte Facebook"
+        id="link-facebook"
+      >
+        <div class="link-icon" aria-hidden="true">
+          <img src="/tools/icon/facebook_48.png" alt="Facebook">
+        </div>
+        <div class="link-text">
+          <div class="link-platform">Réseau Social</div>
+          <div class="link-label">Facebook</div>
+        </div>
+        <div class="link-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <!-- X(Twitter) -->
+      <a
+        class="link-card"
+        href="http://x.com/djamdeen"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Mon compte X( Ex Twitter)"
+        id="link-x"
+      >
+        <div class="link-icon" aria-hidden="true">
+          <img src="/tools/icon/x_48.png" alt="X(Twitter)">
+        </div>
+        <div class="link-text">
+          <div class="link-platform">Réseau Social</div>
+          <div class="link-label">X( Ex Twitter)</div>
+        </div>
+        <div class="link-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <!-- Site Web / Portfolio -->
+      <a
+        class="link-card"
+        href="#"
+        target=""
+        rel="noopener noreferrer"
+        aria-label="Mon site web / portfolio"
+        id="link-website"
+      >
+        <div class="link-icon" aria-hidden="true">
+          <img src="/tools/icon/site-web_48.png" alt="Site Web">
+        </div>
+        <div class="link-text">
+          <div class="link-platform">Portfolio</div>
+          <div class="link-label">Mon Site Web (en cours de réalisation)</div>
+        </div>
+        <div class="link-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+      <!-- GitHub -->
+      <a
+        class="link-card"
+        href="https://github.com/djamdeen"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Mon GitHub"
+        id="link-github"
+      >
+        <div class="link-icon" aria-hidden="true">
+          <img src="/tools/icon/github_48.png" alt="GitHub">
+        </div>
+        <div class="link-text">
+          <div class="link-platform">Code & Projets</div>
+          <div class="link-label">GitHub</div>
+        </div>
+        <div class="link-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+      </a>
+
+    </nav>
+
+    <!-- ── CTA PRINCIPAL ── -->
+    <a
+      class="cta-btn"
+      href="mailto:djamal.madougou@gmail.com"
+      id="cta-contact"
+      aria-label="Me contacter par e-mail"
+    >
+      <span><img src="/tools/icon/mail_24.png" alt="Icone Mail"></span> Me contacter
+    </a>
+
+    <!-- ── PIED DE PAGE ── -->
+    <footer class="footer">
+      <p>© 2026 · Djam Deen · Tous droits réservés</p>
+    </footer>
+
+  </main>
+
+
+  <script>
+    /* =================================================
+       PARTICULES DE FOND
+       Crée de petits points flottants violets/orange
+       pour donner de la profondeur visuelle.
+    ================================================= */
+    (function initParticles() {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx    = canvas.getContext('2d');
+
+      let particles = [];
+      const COLORS  = ['#7B2CBF', '#E0AAFF', '#FF8500', '#240046'];
+      const COUNT   = 55;
+
+      /** Redimensions du canvas au viewport */
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      /** Crée une particule avec des propriétés aléatoires */
+      function createParticle() {
+        return {
+          x      : Math.random() * canvas.width,
+          y      : Math.random() * canvas.height,
+          r      : Math.random() * 2 + 0.5,            // rayon 0.5–2.5px
+          color  : COLORS[Math.floor(Math.random() * COLORS.length)],
+          speedX : (Math.random() - 0.5) * 0.35,       // dérive horizontale
+          speedY : -(Math.random() * 0.4 + 0.1),        // monte lentement
+          opacity: Math.random() * 0.5 + 0.2,
+        };
+      }
+
+      /** Initialise le tableau de particules */
+      function initPool() {
+        particles = [];
+        for (let i = 0; i < COUNT; i++) {
+          const p = createParticle();
+          p.y = Math.random() * canvas.height; // position de départ aléatoire
+          particles.push(p);
+        }
+      }
+
+      /** Boucle d'animation */
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach((p, i) => {
+          // Mise à jour de position
+          p.x += p.speedX;
+          p.y += p.speedY;
+
+          // Recyclage si la particule sort par le haut
+          if (p.y < -5) {
+            particles[i] = createParticle();
+            particles[i].y = canvas.height + 5;
+          }
+          // Recyclage horizontal
+          if (p.x < -5)  p.x = canvas.width  + 5;
+          if (p.x > canvas.width + 5) p.x = -5;
+
+          // Rendu
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.opacity;
+          ctx.fill();
+        });
+
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(animate);
+      }
+
+      resize();
+      initPool();
+      animate();
+
+      window.addEventListener('resize', () => {
+        resize();
+        initPool();
+      });
+    })();
+
+
+    /* =================================================
+       ANIMATION D'ENTRÉE DES CARTES (STAGGER)
+       Chaque carte apparaît avec un léger décalage.
+    ================================================= */
+    (function animateCards() {
+      const cards = document.querySelectorAll('.link-card');
+
+      // Utilise IntersectionObserver si disponible, sinon fallback direct
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.style.animation = entry.target.dataset.anim;
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+
+        cards.forEach((card, index) => {
+          // Stocke l'animation avec délai calculé
+          const delay = index * 90; // ms entre chaque carte
+          card.dataset.anim = `fadeSlideIn 0.55s ${delay}ms cubic-bezier(0.22,1,0.36,1) forwards`;
+          observer.observe(card);
+        });
+      } else {
+        // Fallback : apparition directe sans animation
+        cards.forEach(card => {
+          card.style.opacity = '1';
+          card.style.transform = 'none';
+        });
+      }
+    })();
+
+
+    /* =================================================
+       RIPPLE EFFECT SUR LES CARTES
+       Crée un effet de vague au clic.
+    ================================================= */
+    document.querySelectorAll('.link-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        // Ne pas bloquer la navigation, juste ajouter l'effet
+        const ripple = document.createElement('span');
+        const rect   = card.getBoundingClientRect();
+        const size   = Math.max(rect.width, rect.height) * 1.5;
+        const x      = e.clientX - rect.left - size / 2;
+        const y      = e.clientY - rect.top  - size / 2;
+
+        Object.assign(ripple.style, {
+          position     : 'absolute',
+          width        : size + 'px',
+          height       : size + 'px',
+          left         : x + 'px',
+          top          : y + 'px',
+          borderRadius : '50%',
+          background   : 'rgba(224, 170, 255, 0.15)',
+          transform    : 'scale(0)',
+          animation    : 'ripple-anim 0.5s ease-out forwards',
+          pointerEvents: 'none',
+          zIndex       : '0',
+        });
+
+        card.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 520);
+      });
+    });
+    /* =================================================
+       KEYFRAMES DYNAMIQUES (ajoutées via JS pour éviter
+       de répéter dans le CSS hors-scope)
+    ================================================= */
+    (function injectKeyframes() {
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes fadeSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(24px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes ripple-anim {
+          to {
+            transform: scale(1);
+            opacity: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    })();
+
+  </script>
+
+</body>
+</html>
